@@ -1,0 +1,64 @@
+{
+  "app": {
+    "theme": "light",
+    "ui": "qml"
+  },
+  "wsConnection": {
+    "url": "http://192.168.68.128/",
+    "port": 81
+  },
+  "udpConnection": {
+    "host": "127.0.0.1",
+    "port": 12060
+  },
+  "rigs": {
+    "rigAName": "K3",
+    "rigBName": "IC706"
+  },
+  "antennas": {
+    "ant0Name": "OFF",
+    "ant1Name": "OCF",
+    "ant2Name": "R8",
+    "ant3Name": "3",
+    "ant4Name": "4",
+    "ant5Name": "5",
+    "ant6Name": "LOAD"
+  },
+  "autoSwitch": {
+    "antennaRules": [
+      {
+        "rig": "A",
+        "minFrequency": 10000,
+        "maxFrequency": 800000,
+        "primaryAntenna": 1,
+        "secondaryAntenna": 4
+      },
+      {
+        "rig": "A",
+        "minFrequency": 800000,
+        "maxFrequency": 6000000,
+        "primaryAntenna": 4,
+        "secondaryAntenna": 1
+      },
+      {
+        "rig": "B",
+        "minFrequency": 10000,
+        "maxFrequency": 800000,
+        "primaryAntenna": 1,
+        "secondaryAntenna": 4
+      },
+      {
+        "rig": "B",
+        "minFrequency": 800000,
+        "maxFrequency": 6000000,
+        "primaryAntenna": 4,
+        "secondaryAntenna": 1
+      }
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "console": true,
+    "file": "logs/app.log"
+  }
+}

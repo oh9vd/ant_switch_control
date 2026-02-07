@@ -1,0 +1,35 @@
+{
+  "app": {
+    "theme": "light",
+    "ui": "qml"
+  },
+  "wsConnection": {
+    "url": "http://127.0.0.1/",
+    "port": 81
+  },
+  "udpConnection": {
+    "host": "127.0.0.1",
+    "port": 9000
+  },
+  "rigs": {
+    "rigAName": "A",
+    "rigBName": "B"
+  },
+  "antennas": {
+    "ant0Name": "OFF",
+    "ant1Name": "1",
+    "ant2Name": "2",
+    "ant3Name": "3",
+    "ant4Name": "4",
+    "ant5Name": "5",
+    "ant6Name": "6"
+  },
+  "autoSwitch": {
+    "antennaRules": []
+  },
+  "logging": {
+    "level": "INFO",
+    "console": true,
+    "file": "logs/app.log"
+  }
+}
