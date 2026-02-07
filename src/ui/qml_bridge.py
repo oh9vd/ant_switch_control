@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import json
+
 from PySide6.QtCore import QObject, Property, Signal, Slot
 
 from core.app_controller import AppController
+from core.logging_setup import get_logger
+from ui.ws_status import WsStatus
 
 
 class QmlBridge(QObject):
@@ -12,6 +16,9 @@ class QmlBridge(QObject):
         super().__init__()
         self._controller = controller
         self._status = "Disconnected"
+        self._logger = get_logger(self.__class__.__name__)
+        self._ws_status = WsStatus()
+        self._controller.set_ws_message_listener(self._handle_ws_message)
 
     @Slot(str)
     def sendText(self, text: str) -> None:
@@ -30,3 +37,16 @@ class QmlBridge(QObject):
         self.statusChanged.emit()
 
     status = Property(str, _get_status, _set_status, notify=statusChanged)
+
+    def _handle_ws_message(self, message: str) -> None:
+        try:
+            data = json.loads(message)
+        except json.JSONDecodeError as exc:
+            self._logger.warning("Invalid JSON message: %s", exc)
+            return
+        if isinstance(data, dict):
+            self._ws_status.update_from_dict(data)
+
+    @Property(QObject, constant=True)
+    def wsStatus(self) -> WsStatus:
+        return self._ws_status

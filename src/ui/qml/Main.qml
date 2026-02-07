@@ -38,55 +38,81 @@ ApplicationWindow {
 
                 ToggleButton {
                     id: rbA0
-                    text: qsTr("OFF")
+                    text: antennaNames[0]
                     enabled: true
+                    checked: wsStatus.a === "-"
                     onClicked: {
                         if (rbA0.checked) {
                             cbAutoA.checked = false;
                         }
+                        bridge.sendText("A-");
                     }
                 }
 
                 ToggleButton {
                     id: rbA1
-                    text: qsTr("1")
+                    text: antennaNames[1]
                     enabled: !rbB1.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "1" 
+                    onClicked: {
+                        bridge.sendText("A1");
+                    }
                 }
 
                 ToggleButton {
                     id: rbA2
-                    text: qsTr("2")
+                    text: antennaNames[2]
                     enabled: !rbB2.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "2" 
+                    onClicked: {
+                        bridge.sendText("A2");
+                    }
                 }
 
                 ToggleButton {
                     id: rbA3
-                    text: qsTr("3")
+                    text: antennaNames[3]
                     enabled: !rbB3.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "3"
+                    onClicked: {
+                        bridge.sendText("A3");
+                    }
                 }
 
                 ToggleButton {
                     id: rbA4
-                    text: qsTr("4")
+                    text: antennaNames[4]
                     enabled: !rbB4.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "4"
+                    onClicked: {
+                        bridge.sendText("A4");
+                    }
                 }
 
                 ToggleButton {
                     id: rbA5
-                    text: qsTr("5")
+                    text: antennaNames[5]
                     enabled: !rbB5.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "5"
+                    onClicked: {
+                        bridge.sendText("A5");
+                    }
                 }
 
                 ToggleButton {
                     id: rbA6
-                    text: qsTr("6")
+                    text: antennaNames[6]
                     enabled: !rbB6.checked && !cbAutoA.checked
+                    checked: wsStatus.a === "6"
+                    onClicked: {
+                        bridge.sendText("A6");
+                    }
                 }
             }
 
             Label {
                 id: lblRigA
-                text: qsTr("A")
+                text: rigAName
                 font.bold: true
                 horizontalAlignment: Text.AlignLeft
                 width: 40
@@ -95,7 +121,6 @@ ApplicationWindow {
             Label {
                 id: lblRigAFreq
                 horizontalAlignment: Text.AlignLeft
-                width: 40
             }
         }
 
@@ -120,55 +145,81 @@ ApplicationWindow {
 
                 ToggleButton {
                     id: rbB0
-                    text: qsTr("OFF")
+                    text: antennaNames[0]
                     enabled: true
+                    checked: wsStatus.b === "-"
                     onClicked: {
                         if (rbB0.checked) {
                             cbAutoB.checked = false;
                         }
+                        bridge.sendText("B-");
                     }
                 }
 
                 ToggleButton {
                     id: rbB1
-                    text: qsTr("1")
+                    text: antennaNames[1]
                     enabled: !rbA1.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "1"
+                    onClicked: {
+                        bridge.sendText("B1");
+                    }
                 }
 
                 ToggleButton {
                     id: rbB2
-                    text: qsTr("2")
+                    text: antennaNames[2]
                     enabled: !rbA2.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "2"
+                    onClicked: {
+                        bridge.sendText("B2");
+                    }
                 }
 
                 ToggleButton {
                     id: rbB3
-                    text: qsTr("3")
+                    text: antennaNames[3]
                     enabled: !rbA3.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "3"
+                    onClicked: {
+                        bridge.sendText("B3");
+                    }
                 }
 
                 ToggleButton {
                     id: rbB4
-                    text: qsTr("4")
+                    text: antennaNames[4]
                     enabled: !rbA4.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "4"
+                    onClicked: {
+                        bridge.sendText("B4");
+                    }
                 }
 
                 ToggleButton {
                     id: rbB5
-                    text: qsTr("5")
+                    text: antennaNames[5]
                     enabled: !rbA5.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "5"
+                    onClicked: {
+                        bridge.sendText("B5");
+                    }
                 }
 
                 ToggleButton {
                     id: rbB6
-                    text: qsTr("6")
+                    text: antennaNames[6]
                     enabled: !rbA6.checked && !cbAutoB.checked
+                    checked: wsStatus.b === "6"
+                    onClicked: {
+                        bridge.sendText("B6");
+                    }
                 }
             }
 
             Label {
                 id: lblRigB
-                text: qsTr("B")
+                text: rigBName
                 horizontalAlignment: Text.AlignLeft
                 width: 40
                 font.bold: true

@@ -24,8 +24,26 @@ def create_qml_engine(controller: AppController) -> QQmlApplicationEngine:
         "appTitle",
         "2x6 Remote Switch Controller",
     )
+    engine.rootContext().setContextProperty("wsStatus", bridge.wsStatus)
+    antenna_names = controller.settings.antennas
+    engine.rootContext().setContextProperty(
+        "antennaNames",
+        [
+            antenna_names.get("ant0Name", "OFF"),
+            antenna_names.get("ant1Name", "1"),
+            antenna_names.get("ant2Name", "2"),
+            antenna_names.get("ant3Name", "3"),
+            antenna_names.get("ant4Name", "4"),
+            antenna_names.get("ant5Name", "5"),
+            antenna_names.get("ant6Name", "6"),
+        ],
+    )
+    engine.rootContext().setContextProperty("rigAName", controller.settings.rig_a_name)
+    engine.rootContext().setContextProperty("rigBName", controller.settings.rig_b_name)
+    
     engine.rootContext().setContextProperty("appVersion", get_version())
 
     qml_path = _resource_path()
     engine.load(QUrl.fromLocalFile(str(qml_path)))
     return engine
+

@@ -3,6 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Optional
 
+from core.logging_setup import get_logger
+
+from PySide6.QtCore import QUrl
+from PySide6.QtWebSockets import QWebSocket
+
 
 @dataclass
 class WebSocketConfig:
@@ -14,6 +19,8 @@ class WebSocketClient:
     def __init__(self, config: WebSocketConfig) -> None:
         self._config = config
         self._on_message: Optional[Callable[[str], None]] = None
+        self._logger = get_logger(self.__class__.__name__)
+        self._socket: QWebSocket | None = None
 
     def set_message_handler(self, handler: Callable[[str], None]) -> None:
         self._on_message = handler
@@ -21,13 +28,46 @@ class WebSocketClient:
     def connect(self) -> None:
         if not self._config.enabled:
             return
-        # TODO: implement with a websocket library compatible with Qt event loop.
+        if self._socket is None:
+            self._socket = QWebSocket()
+            self._connect_signal("textMessageReceived", self._handle_text_message)
+            self._connect_signal("connected", self._handle_connected)
+            self._connect_signal("disconnected", self._handle_disconnected)
+        self._logger.info("Opening WebSocket: %s", self._config.url)
+        self._socket.open(QUrl(self._config.url))
 
     def send(self, message: str) -> None:
         if not self._config.enabled:
             return
-        # TODO: implement send logic.
+        if self._socket is not None and self._socket.isValid():
+            self._logger.debug("Sending WebSocket message: %s", message)
+            self._socket.sendTextMessage(message)
+        else:
+            self._logger.warning("WebSocket not connected; message not sent")
 
     def close(self) -> None:
-        # TODO: implement close logic.
-        return
+        if self._socket is not None:
+            self._socket.close()
+
+    def _handle_text_message(self, message: str) -> None:
+        self._logger.debug("WebSocket text message received: %s", message)
+        if self._on_message:
+            self._on_message(message)
+
+    def _handle_connected(self) -> None:
+        self._logger.info("WebSocket connected")
+
+    def _handle_disconnected(self) -> None:
+        self._logger.info("WebSocket disconnected")
+
+    def _connect_signal(self, name: str, handler) -> None:
+        if self._socket is None:
+            return
+        signal = getattr(self._socket, name, None)
+        if signal is None or not hasattr(signal, "connect"):
+            self._logger.warning("WebSocket signal missing: %s", name)
+            return
+        try:
+            signal.connect(handler)
+        except Exception as exc:
+            self._logger.warning("Failed to connect WebSocket signal %s: %s", name, exc)

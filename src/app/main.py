@@ -20,13 +20,13 @@ def main() -> int:
     settings = load_settings(Path("config.json"))
     configure_logging(settings.log_level, settings.log_console, settings.log_file)
     controller = AppController(settings=settings, state=AppState())
-    controller.start()
-
     app = QGuiApplication(sys.argv)
     engine = create_qml_engine(controller)
     if not engine.rootObjects():
         controller.stop()
         return 1
+
+    controller.start()
 
     exit_code = app.exec()
     controller.stop()
