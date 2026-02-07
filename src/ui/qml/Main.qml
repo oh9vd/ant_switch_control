@@ -120,6 +120,7 @@ ApplicationWindow {
 
             Label {
                 id: lblRigAFreq
+                text: radioStatus.aFreq
                 horizontalAlignment: Text.AlignLeft
             }
         }
@@ -227,6 +228,7 @@ ApplicationWindow {
 
             Label {
                 id: lblRigBFreq
+                text: radioStatus.bFreq
                 horizontalAlignment: Text.AlignLeft
                 width: 40
             }

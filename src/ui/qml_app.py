@@ -25,6 +25,7 @@ def create_qml_engine(controller: AppController) -> QQmlApplicationEngine:
         "2x6 Remote Switch Controller",
     )
     engine.rootContext().setContextProperty("wsStatus", bridge.wsStatus)
+    engine.rootContext().setContextProperty("radioStatus", bridge.radioStatus)
     antenna_names = controller.settings.antennas
     engine.rootContext().setContextProperty(
         "antennaNames",

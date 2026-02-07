@@ -6,6 +6,7 @@ from PySide6.QtCore import QObject, Property, Signal, Slot
 
 from core.app_controller import AppController
 from core.logging_setup import get_logger
+from ui.radio_status import RadioStatus
 from ui.ws_status import WsStatus
 
 
@@ -20,7 +21,9 @@ class QmlBridge(QObject):
         self._busy = False
         self._logger = get_logger(self.__class__.__name__)
         self._ws_status = WsStatus()
+        self._radio_status = RadioStatus()
         self._controller.set_ws_message_listener(self._handle_ws_message)
+        self._controller.set_udp_info_listener(self._handle_udp_info)
 
     @Slot(str)
     def sendText(self, text: str) -> None:
@@ -65,3 +68,10 @@ class QmlBridge(QObject):
     @Property(QObject, constant=True)
     def wsStatus(self) -> WsStatus:
         return self._ws_status
+
+    def _handle_udp_info(self, info) -> None:
+        self._radio_status.update_from_radio_info(info)
+
+    @Property(QObject, constant=True)
+    def radioStatus(self) -> RadioStatus:
+        return self._radio_status

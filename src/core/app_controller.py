@@ -6,6 +6,7 @@ from urllib.parse import urlparse, urlunparse
 
 from config.settings import AppSettings
 from core.logging_setup import get_logger
+from core.radio_info import RadioInfo, parse_radio_info
 from core.state import AppState
 from net.udp_client import UdpClient, UdpConfig
 from net.websocket_client import WebSocketClient, WebSocketConfig
@@ -19,6 +20,7 @@ class AppController:
     def __post_init__(self) -> None:
         self._logger = get_logger(self.__class__.__name__)
         self._ws_message_listener: Optional[Callable[[str], None]] = None
+        self._udp_info_listener: Optional[Callable[[RadioInfo], None]] = None
         ws_url = _build_ws_url(self.settings.ws_url, self.settings.ws_port)
         self.ws_client = WebSocketClient(
             WebSocketConfig(url=ws_url)
@@ -27,6 +29,7 @@ class AppController:
         self.udp_client = UdpClient(
             UdpConfig(host=self.settings.udp_host, port=self.settings.udp_port)
         )
+        self.udp_client.set_message_handler(self._handle_udp_message)
 
     def start(self) -> None:
         try:
@@ -49,19 +52,27 @@ class AppController:
         except Exception as exc:
             self._logger.exception("WebSocket send failed: %s", exc)
 
-        try:
-            self.udp_client.send(text.encode("utf-8"))
-        except Exception as exc:
-            self._logger.exception("UDP send failed: %s", exc)
-
     def set_ws_message_listener(self, listener: Callable[[str], None]) -> None:
         self._ws_message_listener = listener
+
+    def set_udp_info_listener(self, listener: Callable[[RadioInfo], None]) -> None:
+        self._udp_info_listener = listener
 
     def _handle_ws_message(self, message: str) -> None:
         self.state.last_message = message
         self._logger.info("WebSocket message received: %s", message)
         if self._ws_message_listener:
             self._ws_message_listener(message)
+
+    def _handle_udp_message(self, payload: bytes) -> None:
+        try:
+            xml_text = payload.decode("utf-8", errors="ignore")
+            self.state.radio_info = parse_radio_info(xml_text)
+            self._logger.debug("UDP RadioInfo parsed: %s", self.state.radio_info)
+            if self._udp_info_listener:
+                self._udp_info_listener(self.state.radio_info)
+        except Exception as exc:
+            self._logger.exception("Failed to parse UDP XML: %s", exc)
 
 
 def _build_ws_url(raw_url: str, port: int) -> str:
