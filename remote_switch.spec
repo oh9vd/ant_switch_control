@@ -7,7 +7,11 @@ block_cipher = None
 
 pyside6_datas, pyside6_bins, pyside6_hidden = collect_all("PySide6")
 
-datas = pyside6_datas + [("config.json", "."), ("src/ui/qml", "ui/qml")]
+datas = pyside6_datas + [
+    ("config.json", "."),
+    ("src/ui/qml", "ui/qml"),
+    ("assets", "assets"),
+]
 if Path("version.txt").is_file():
     datas.append(("version.txt", "."))
 
@@ -46,7 +50,6 @@ app = Analysis(
         "PySide6.QtSerialBus",
         "PySide6.QtSpatialAudio",
         "PySide6.QtSql",
-        "PySide6.QtSvg",
         "PySide6.QtSvgWidgets",
         "PySide6.QtTest",
         "PySide6.QtTextToSpeech",
@@ -71,6 +74,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name="remote_switch",
+    icon="assets/app_icon.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=True,
