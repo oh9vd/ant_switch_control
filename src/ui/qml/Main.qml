@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 ApplicationWindow {
     id: root
@@ -30,7 +31,7 @@ ApplicationWindow {
             CheckBox {
                 id: cbAutoA
                 text: qsTr("Auto")
-                enabled: radioStatus.aFreq > 0 && !bridge.busy  
+                enabled: radioStatus.aFreq > 0 && !bridge.busy
                 checked: bridge.autoA
                 onClicked: bridge.autoA = checked
             }
@@ -54,7 +55,7 @@ ApplicationWindow {
                             cbAutoA.checked = false;
                             bridge.autoA = false;
                         }
-                        bridge.selectAntenna("A", 0)
+                        bridge.selectAntenna("A", 0);
                     }
                 }
 
@@ -64,7 +65,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB1.checked && (!cbAutoA.checked || wsStatus.a === "1")
                     checked: wsStatus.a === "1"
                     onClicked: {
-                        bridge.selectAntenna("A", 1)
+                        bridge.selectAntenna("A", 1);
                     }
                 }
 
@@ -74,7 +75,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB2.checked && (!cbAutoA.checked || wsStatus.a === "2")
                     checked: wsStatus.a === "2"
                     onClicked: {
-                        bridge.selectAntenna("A", 2)
+                        bridge.selectAntenna("A", 2);
                     }
                 }
 
@@ -84,7 +85,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB3.checked && (!cbAutoA.checked || wsStatus.a === "3")
                     checked: wsStatus.a === "3"
                     onClicked: {
-                        bridge.selectAntenna("A", 3)
+                        bridge.selectAntenna("A", 3);
                     }
                 }
 
@@ -94,7 +95,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB4.checked && (!cbAutoA.checked || wsStatus.a === "4")
                     checked: wsStatus.a === "4"
                     onClicked: {
-                        bridge.selectAntenna("A", 4)
+                        bridge.selectAntenna("A", 4);
                     }
                 }
 
@@ -104,7 +105,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB5.checked && (!cbAutoA.checked || wsStatus.a === "5")
                     checked: wsStatus.a === "5"
                     onClicked: {
-                        bridge.selectAntenna("A", 5)
+                        bridge.selectAntenna("A", 5);
                     }
                 }
 
@@ -114,7 +115,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbB6.checked && (!cbAutoA.checked || wsStatus.a === "6")
                     checked: wsStatus.a === "6"
                     onClicked: {
-                        bridge.selectAntenna("A", 6)
+                        bridge.selectAntenna("A", 6);
                     }
                 }
             }
@@ -141,7 +142,7 @@ ApplicationWindow {
             CheckBox {
                 id: cbAutoB
                 text: qsTr("Auto")
-                enabled: radioStatus.bFreq > 0 && !bridge.busy 
+                enabled: radioStatus.bFreq > 0 && !bridge.busy
                 checked: bridge.autoB
                 onClicked: bridge.autoB = checked
             }
@@ -165,7 +166,7 @@ ApplicationWindow {
                             cbAutoB.checked = false;
                             bridge.autoB = false;
                         }
-                        bridge.selectAntenna("B", 0)
+                        bridge.selectAntenna("B", 0);
                     }
                 }
 
@@ -175,7 +176,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA1.checked && (!cbAutoB.checked || wsStatus.b === "1")
                     checked: wsStatus.b === "1"
                     onClicked: {
-                        bridge.selectAntenna("B", 1)
+                        bridge.selectAntenna("B", 1);
                     }
                 }
 
@@ -185,7 +186,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA2.checked && (!cbAutoB.checked || wsStatus.b === "2")
                     checked: wsStatus.b === "2"
                     onClicked: {
-                        bridge.selectAntenna("B", 2)
+                        bridge.selectAntenna("B", 2);
                     }
                 }
 
@@ -195,7 +196,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA3.checked && (!cbAutoB.checked || wsStatus.b === "3")
                     checked: wsStatus.b === "3"
                     onClicked: {
-                        bridge.selectAntenna("B", 3)
+                        bridge.selectAntenna("B", 3);
                     }
                 }
 
@@ -205,7 +206,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA4.checked && (!cbAutoB.checked || wsStatus.b === "4")
                     checked: wsStatus.b === "4"
                     onClicked: {
-                        bridge.selectAntenna("B", 4)
+                        bridge.selectAntenna("B", 4);
                     }
                 }
 
@@ -215,7 +216,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA5.checked && (!cbAutoB.checked || wsStatus.b === "5")
                     checked: wsStatus.b === "5"
                     onClicked: {
-                        bridge.selectAntenna("B", 5)
+                        bridge.selectAntenna("B", 5);
                     }
                 }
 
@@ -225,7 +226,7 @@ ApplicationWindow {
                     enabled: !bridge.busy && !rbA6.checked && (!cbAutoB.checked || wsStatus.b === "6")
                     checked: wsStatus.b === "6"
                     onClicked: {
-                        bridge.selectAntenna("B", 6)
+                        bridge.selectAntenna("B", 6);
                     }
                 }
             }
@@ -248,16 +249,19 @@ ApplicationWindow {
     }
     footer: ToolBar {
         height: 20
-        Row {
+        RowLayout {
             spacing: 8
             width: parent.width * 0.9
             Label {
                 id: lblStatus
-                text: "Status "
+                text: bridge.statusMessage
+                leftPadding: 8
             }
             Label {
                 id: lblVersion
                 text: "Version " + appVersion
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignRight
             }
         }
     }
