@@ -36,6 +36,99 @@ flowchart LR
 - The flag is cleared in `_handle_ws_message`, `_handle_ws_error`, `_handle_ws_disconnected`, and `_handle_ws_send_failed` in [src/ui/qml_bridge.py](src/ui/qml_bridge.py).
 - QML uses `bridge.busy` to disable antenna buttons and avoid overlapping commands (see [src/ui/qml/Main.qml](src/ui/qml/Main.qml)).
 
+## Config
+
+The app reads settings from [config.json](config.json).
+
+- `app.theme`: UI theme name (for QML this is currently informational).
+- `app.ui`: UI backend selector; `qml` is the supported value.
+- `wsConnection.url`: Base URL or host for the WebSocket/HTTP bridge.
+- `wsConnection.port`: WebSocket port (default firmware uses 81).
+- `udpConnection.host`: Host to bind/connect for UDP radio info.
+- `udpConnection.port`: UDP port for XML radio info frames.
+- `rigs.rigAName`: Display name for Rig A.
+- `rigs.rigBName`: Display name for Rig B.
+- `antennas.ant0Name`: Display name for antenna 0 (OFF).
+- `antennas.ant1Name`..`antennas.ant6Name`: Display names for antennas 1-6.
+- `autoSwitch.antennaRules`: List of auto-switch rules (per rig and frequency range).
+- `autoSwitch.antennaRules[].rig`: Target rig, `A` or `B`.
+- `autoSwitch.antennaRules[].minFrequency`: Minimum frequency for the rule (kHz).
+- `autoSwitch.antennaRules[].maxFrequency`: Maximum frequency for the rule (kHz).
+- `autoSwitch.antennaRules[].primaryAntenna`: Antenna index to select first.
+- `autoSwitch.antennaRules[].secondaryAntenna`: Fallback antenna index if primary is reseved by other rig.
+- `logging.level`: Log level (e.g., `DEBUG`, `INFO`, `WARNING`).
+- `logging.console`: Enable console logging output.
+- `logging.file`: Log file path.
+
+Example config:
+
+```json
+{
+	"app": {
+		"theme": "dark",
+		"ui": "qml"
+	},
+	"wsConnection": {
+		"url": "http://192.168.68.128/",
+		"port": 81
+	},
+	"udpConnection": {
+		"host": "127.0.0.1",
+		"port": 12060
+	},
+	"rigs": {
+		"rigAName": "K3",
+		"rigBName": "IC706"
+	},
+	"antennas": {
+		"ant0Name": "OFF",
+		"ant1Name": "OCF",
+		"ant2Name": "R8",
+		"ant3Name": "3",
+		"ant4Name": "4",
+		"ant5Name": "5",
+		"ant6Name": "DL"
+	},
+	"autoSwitch": {
+		"antennaRules": [
+			{
+				"rig": "A",
+				"minFrequency": 100,
+				"maxFrequency": 8000,
+				"primaryAntenna": 1,
+				"secondaryAntenna": 4
+			},
+			{
+				"rig": "A",
+				"minFrequency": 8000,
+				"maxFrequency": 60000,
+				"primaryAntenna": 4,
+				"secondaryAntenna": 1
+			},
+			{
+				"rig": "B",
+				"minFrequency": 100,
+				"maxFrequency": 8000,
+				"primaryAntenna": 1,
+				"secondaryAntenna": 4
+			},
+			{
+				"rig": "B",
+				"minFrequency": 8000,
+				"maxFrequency": 60000,
+				"primaryAntenna": 4,
+				"secondaryAntenna": 1
+			}
+		]
+	},
+	"logging": {
+		"level": "DEBUG",
+		"console": true,
+		"file": "logs/app.log"
+	}
+}
+```
+
 ## Big Picture
 
 ```mermaid
