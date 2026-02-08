@@ -13,6 +13,8 @@ dist/
 *.egg-info/
 .eggs/
 
+# git commit hashes
+version.txt
 
 # Virtual environments
 .venv/
