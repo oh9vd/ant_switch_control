@@ -35,10 +35,24 @@ if exist "%CFG_BACKUP%" (
   del "%CFG_BACKUP%"
 )
 
+
 set "ARCHIVE_BASE=%DIST_BASE%\remote_switch-%APP_GIT_COMMIT%-windows"
+echo INFO: Creating archive "%ARCHIVE_BASE%.7z"...
 if exist "%DIST_APP%" (
-  where 7z >nul 2>nul && 7z a -t7z "%ARCHIVE_BASE%.7z" "%DIST_APP%\*" >nul
+  set "SEVEN_ZIP="
+  for %%p in ("%ProgramFiles%\7-Zip\7z.exe" "%ProgramFiles(x86)%\7-Zip\7z.exe") do (
+    if exist "%%~p" set "SEVEN_ZIP=%%~p"
+  )
+  if not defined SEVEN_ZIP (
+    for /f "delims=" %%p in ('where 7z 2^>nul') do set "SEVEN_ZIP=%%p"
+  )
+  if defined SEVEN_ZIP (
+    "!SEVEN_ZIP!" a -t7z "%ARCHIVE_BASE%.7z" "%DIST_APP%\*" >nul
+  ) else (
+    echo WARNING: 7z not found. Skipping archive creation.
+  )
 )
+echo INFO: Build complete. Output directory: "%DIST_APP%"
 
 popd
 endlocal
