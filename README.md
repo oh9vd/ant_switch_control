@@ -1,4 +1,4 @@
-# Remote Switch (LoRa and WbSocket)
+# Remote Switch (LoRa and WebSocket)
 
 Remote antenna switch system for two rigs and up to six antennas. This repo contains:
 
