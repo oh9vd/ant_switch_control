@@ -28,7 +28,9 @@ The UI reads settings from `ui/config.json`. See [ui/README.md](ui/README.md) fo
 Use the build scripts in `ui/scripts`.
 
 - Windows: `ui/scripts/build_windows.cmd`
-- Linux: `ui/scripts/build_linux.sh`
+- Linux (native): `ui/scripts/build_linux.sh`
+- Linux from Windows (WSL): `ui/scripts/build_linux.cmd`
+- Linux from Windows (Docker): `ui/scripts/build_linux.cmd docker`
 
 ## Firmware
 
