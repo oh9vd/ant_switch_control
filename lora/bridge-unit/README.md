@@ -4,7 +4,7 @@ This unit has LoRaWAN radio to communicate with Mast unit and WiFi interface to 
 
 ## Arduino Build
 
-- **Board**: Heltec WiFi LoRa 32 (V2)
+- **Board**: [Heltec WiFi LoRa 32(V2)](https://resource.heltec.cn/download/package_heltec_esp32_index.json)
 
 ## Files
 
