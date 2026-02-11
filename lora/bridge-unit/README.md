@@ -9,5 +9,5 @@ This unit has LoRaWAN radio to communicate with Mast unit and WiFi interface to 
 ## Files
 
 - `bridge-uini.ino`: The main program
-- `html_page.h`: Simple html page for switching antenas and set the Mast and Bridge transmit power. (using jQuery)
+- `html_page.h`: Simple html page for switching antenas and set the Mast and Bridge transmit power. (using raw DOM interface)
 - `arduino_secrets.TEMPLATE.h`: Example file for setting the WiFi SSID and Password. Copy this file to `arduino_secrets.h` and set the your SSID and PASSWORD.
