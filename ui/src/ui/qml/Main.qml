@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 
 ApplicationWindow {
@@ -8,6 +9,9 @@ ApplicationWindow {
     height: 85
     visible: true
     title: appTitle
+    Material.theme: appTheme === "dark" ? Material.Dark : Material.Light
+    Material.accent: Material.Teal
+    Material.primary: Material.BlueGrey
     function formatKHz(value) {
         if (!value || value <= 0) {
             return "";
@@ -17,6 +21,50 @@ ApplicationWindow {
     component ToggleButton: Button {
         checkable: true
         width: 37
+        height: 32
+        background: Rectangle {
+            radius: 6
+            color: {
+                if (parent.checked)
+                    return Material.accent;
+                else if (!parent.enabled)
+                    return Material.background;
+                else if (parent.hovered)
+                    return Qt.rgba(Material.accent.r, Material.accent.g, Material.accent.b, 0.12);
+                else
+                    return Material.background;
+            }
+            border.color: {
+                if (parent.checked)
+                    return Material.accent;
+                else if (!parent.enabled)
+                    return Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.2);
+                else
+                    return Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.3);
+            }
+            border.width: 1
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 150
+                }
+            }
+        }
+        contentItem: Text {
+            anchors.fill: parent
+            text: parent.text
+            font.pixelSize: 13
+            color: {
+                if (!parent.enabled)
+                    return Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.4);
+                else if (parent.checked)
+                    return "white";
+                else
+                    return Material.foreground;
+            }
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     Column {
@@ -31,6 +79,7 @@ ApplicationWindow {
             CheckBox {
                 id: cbAutoA
                 text: qsTr("Auto")
+                height: rbA0.height
                 enabled: radioStatus.aFreq > 0 && !bridge.busy
                 checked: bridge.autoA
                 onClicked: bridge.autoA = checked
@@ -124,7 +173,9 @@ ApplicationWindow {
                 id: lblRigA
                 text: rigAName
                 font.bold: true
+                height: rbA0.height
                 horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
                 width: 40
             }
 
@@ -132,6 +183,8 @@ ApplicationWindow {
                 id: lblRigAFreq
                 text: formatKHz(radioStatus.aFreq)
                 horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                height: rbA0.height
             }
         }
 
@@ -142,6 +195,7 @@ ApplicationWindow {
             CheckBox {
                 id: cbAutoB
                 text: qsTr("Auto")
+                height: rbB0.height
                 enabled: radioStatus.bFreq > 0 && !bridge.busy
                 checked: bridge.autoB
                 onClicked: bridge.autoB = checked
@@ -235,6 +289,8 @@ ApplicationWindow {
                 id: lblRigB
                 text: rigBName
                 horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                height: rbB0.height
                 width: 40
                 font.bold: true
             }
@@ -243,7 +299,9 @@ ApplicationWindow {
                 id: lblRigBFreq
                 text: formatKHz(radioStatus.bFreq)
                 horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
                 width: 40
+                height: rbB0.height
             }
         }
     }

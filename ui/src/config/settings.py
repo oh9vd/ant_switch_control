@@ -9,7 +9,6 @@ from typing import Any, Dict
 @dataclass(frozen=True)
 class AppSettings:
     theme: str
-    ui_mode: str
     rig_a_name: str
     rig_b_name: str
     antennas: dict[str, str]
@@ -57,7 +56,6 @@ def load_settings(overrides_path: Path | None = None) -> AppSettings:
 
     return AppSettings(
         theme=str(app_cfg.get("theme", "light")),
-        ui_mode=str(app_cfg.get("ui", "qml")),
         rig_a_name=str(rigs_cfg.get("rigAName", "A")),
         rig_b_name=str(rigs_cfg.get("rigBName", "B")),
         antennas={

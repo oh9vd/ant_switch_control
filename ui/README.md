@@ -23,8 +23,7 @@ Docker requires Docker Desktop running. Pull the image once: `docker pull python
 
 The app reads settings from [config.json](config.json).
 
-- `app.theme`: UI theme name (for QML this is currently informational).
-- `app.ui`: UI backend selector; `qml` is the supported value.
+- `app.theme`: UI theme name (`light` or `dark`). Uses Qt Material style.
 - `wsConnection.url`: Base URL or host for the WebSocket/HTTP bridge.
 - `wsConnection.port`: WebSocket port (default firmware uses 81).
 - `udpConnection.host`: Host to bind/connect for UDP radio info.
@@ -48,8 +47,7 @@ Example config:
 ```json
 {
   "app": {
-    "theme": "dark",
-    "ui": "qml"
+    "theme": "dark"
   },
   "wsConnection": {
     "url": "http://192.168.68.128/",

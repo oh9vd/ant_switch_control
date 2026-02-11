@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -8,6 +9,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtQuickControls2 import QQuickStyle
 
 from config.settings import load_settings
 from core.logging_setup import configure_logging
@@ -28,6 +30,15 @@ def main() -> int:
     settings = load_settings(Path("config.json"))
     configure_logging(settings.log_level, settings.log_console, settings.log_file)
     controller = AppController(settings=settings, state=AppState())
+    
+    # Set Material style with theme variant before creating the app
+    os.environ["QT_QUICK_CONTROLS_STYLE"] = "Material"
+    if settings.theme.lower() == "dark":
+        os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark"
+    else:
+        os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Light"
+    
+    QQuickStyle.setStyle("Material")
     app = QGuiApplication(sys.argv)
     app.setWindowIcon(QIcon(str(_icon_path())))
     engine = create_qml_engine(controller)

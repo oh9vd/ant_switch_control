@@ -1,7 +1,6 @@
 {
   "app": {
-    "theme": "dark",
-    "ui": "qml"
+    "theme": "light"
   },
   "wsConnection": {
     "url": "http://192.168.68.128/",

@@ -41,7 +41,7 @@ def create_qml_engine(controller: AppController) -> QQmlApplicationEngine:
     )
     engine.rootContext().setContextProperty("rigAName", controller.settings.rig_a_name)
     engine.rootContext().setContextProperty("rigBName", controller.settings.rig_b_name)
-    
+    engine.rootContext().setContextProperty("appTheme", controller.settings.theme)
     engine.rootContext().setContextProperty("appVersion", get_version())
 
     qml_path = _resource_path()

@@ -1,7 +1,6 @@
 {
   "app": {
-    "theme": "light",
-    "ui": "qml"
+    "theme": "light"
   },
   "wsConnection": {
     "url": "http://127.0.0.1/",
