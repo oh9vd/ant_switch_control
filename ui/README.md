@@ -26,6 +26,10 @@ The app reads settings from [config.json](config.json).
 - `app.theme`: UI theme name (`light`, `dark`, or `system`). Uses Qt Material style.
 - `wsConnection.url`: Base URL or host for the WebSocket/HTTP bridge.
 - `wsConnection.port`: WebSocket port (default firmware uses 81).
+- `wsConnection.autoReconnect`: Enable automatic reconnection after disconnect (default `true`).
+- `wsConnection.reconnectIntervalMs`: Delay between reconnect attempts in ms (default `3000`).
+- `wsConnection.maxReconnectAttempts`: Max reconnect tries; 0 = unlimited (default `0`).
+- `wsConnection.heartbeatTimeoutMs`: Watchdog timeout in ms; 0 = disabled (default `7000`).
 - `udpConnection.host`: Host to bind/connect for UDP radio info.
 - `udpConnection.port`: UDP port for XML radio info frames.
 - `rigs.rigAName`: Display name for Rig A.
@@ -51,7 +55,11 @@ Example config:
   },
   "wsConnection": {
     "url": "http://192.168.68.128/",
-    "port": 81
+    "port": 81,
+    "autoReconnect": true,
+    "reconnectIntervalMs": 3000,
+    "maxReconnectAttempts": 0,
+    "heartbeatTimeoutMs": 7000
   },
   "udpConnection": {
     "host": "127.0.0.1",
@@ -147,8 +155,31 @@ flowchart LR
 
 - `AppController` in [src/core/app_controller.py](src/core/app_controller.py) owns the WebSocket and UDP clients, wires callbacks, and exposes `start()`, `stop()`, and `send_text()`.
 - `QmlBridge` in [src/ui/qml_bridge.py](src/ui/qml_bridge.py) is the main UI bridge, exposing properties, signals, and slots used by QML.
-- `WebSocketClient` in [src/net/websocket_client.py](src/net/websocket_client.py) manages the WebSocket connection and event hooks.
+- `WebSocketClient` in [src/net/websocket_client.py](src/net/websocket_client.py) manages the WebSocket connection and event hooks; includes automatic reconnection and heartbeat watchdog (see below).
 - `UdpClient` in [src/net/udp_client.py](src/net/udp_client.py) listens for UDP radio info frames.
+
+### WebSocket reconnect and heartbeat
+
+The `WebSocketClient` automatically reconnects after a disconnect and detects stale connections using a heartbeat watchdog.
+
+**Auto-reconnect:**
+- When the WebSocket disconnects unexpectedly, the client waits `reconnect_interval_ms` (default 3000 ms) and attempts to reconnect.
+- Reconnection continues until successful or `max_reconnect_attempts` is reached (0 = unlimited).
+- Calling `close()` intentionally stops the reconnect loop.
+
+**Heartbeat watchdog:**
+- The bridge sends status messages every ~5 seconds. The client expects to receive a message within `heartbeat_timeout_ms` (default 7000 ms).
+- If no message arrives in time, the client closes the socket and triggers reconnection.
+- Set `heartbeat_timeout_ms` to 0 to disable the watchdog.
+
+Configuration in `WebSocketConfig`:
+
+| Parameter               | Default | Description                                      |
+|-------------------------|---------|--------------------------------------------------|
+| `auto_reconnect`        | `True`  | Enable automatic reconnection                    |
+| `reconnect_interval_ms` | `3000`  | Delay between reconnect attempts (ms)            |
+| `max_reconnect_attempts`| `0`     | Max reconnect tries; 0 = unlimited               |
+| `heartbeat_timeout_ms`  | `7000`  | Watchdog timeout; 0 = disabled                   |
 - `WsStatus` in [src/ui/ws_status.py](src/ui/ws_status.py) stores device state parsed from WebSocket JSON.
 - `RadioStatus` in [src/ui/radio_status.py](src/ui/radio_status.py) stores rig frequency info parsed from UDP XML.
 - `AppState` in [src/core/state.py](src/core/state.py) keeps basic runtime state shared by the controller.

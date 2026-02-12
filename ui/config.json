@@ -4,7 +4,11 @@
   },
   "wsConnection": {
     "url": "http://192.168.68.128/",
-    "port": 81
+    "port": 81,
+    "autoReconnect": true,
+    "reconnectIntervalMs": 3000,
+    "maxReconnectAttempts": 0,
+    "heartbeatTimeoutMs": 7000
   },
   "udpConnection": {
     "host": "127.0.0.1",

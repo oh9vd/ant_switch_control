@@ -26,7 +26,13 @@ class AppController:
         self._udp_info_listener: Optional[Callable[[RadioInfo], None]] = None
         ws_url = _build_ws_url(self.settings.ws_url, self.settings.ws_port)
         self.ws_client = WebSocketClient(
-            WebSocketConfig(url=ws_url)
+            WebSocketConfig(
+                url=ws_url,
+                auto_reconnect=self.settings.ws_auto_reconnect,
+                reconnect_interval_ms=self.settings.ws_reconnect_interval_ms,
+                max_reconnect_attempts=self.settings.ws_max_reconnect_attempts,
+                heartbeat_timeout_ms=self.settings.ws_heartbeat_timeout_ms,
+            )
         )
         self.ws_client.set_message_handler(self._handle_ws_message)
         self.ws_client.set_error_handler(self._handle_ws_error)

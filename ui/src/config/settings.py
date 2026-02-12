@@ -14,6 +14,10 @@ class AppSettings:
     antennas: dict[str, str]
     ws_url: str
     ws_port: int
+    ws_auto_reconnect: bool
+    ws_reconnect_interval_ms: int
+    ws_max_reconnect_attempts: int
+    ws_heartbeat_timeout_ms: int
     udp_host: str
     udp_port: int
     log_level: str
@@ -69,6 +73,10 @@ def load_settings(overrides_path: Path | None = None) -> AppSettings:
         },
         ws_url=str(ws_cfg.get("url", "http://127.0.0.1/")),
         ws_port=int(ws_cfg.get("port", 81)),
+        ws_auto_reconnect=bool(ws_cfg.get("autoReconnect", True)),
+        ws_reconnect_interval_ms=int(ws_cfg.get("reconnectIntervalMs", 3000)),
+        ws_max_reconnect_attempts=int(ws_cfg.get("maxReconnectAttempts", 0)),
+        ws_heartbeat_timeout_ms=int(ws_cfg.get("heartbeatTimeoutMs", 7000)),
         udp_host=str(udp_cfg.get("host", "127.0.0.1")),
         udp_port=int(udp_cfg.get("port", 9000)),
         log_level=str(log_cfg.get("level", "INFO")),
