@@ -17,7 +17,6 @@ class QmlBridge(QObject):
     busyChanged = Signal()
     autoAChanged = Signal()
     autoBChanged = Signal()
-
     def __init__(self, controller: AppController) -> None:
         super().__init__()
         self._controller = controller
@@ -109,6 +108,10 @@ class QmlBridge(QObject):
             self._logger.warning("Invalid JSON message: %s", exc)
             return
         if isinstance(data, dict):
+            if "error" in data:
+                self._set_busy(False)
+                self._set_status_message(data["error"])
+                return
             self._ws_status.update_from_dict(data)
             self._set_busy(False)
             self._set_status_message("OK")
@@ -177,7 +180,7 @@ class QmlBridge(QObject):
         return None
 
     def _current_antenna(self, rig: Rig) -> str:
-        return self._ws_status.a if rig == Rig.A else self._ws_status.b
+        return self._ws_status._a if rig == Rig.A else self._ws_status._b
 
     def _select_antenna_internal(self, rig: str, value: int) -> None:
         rig = rig.upper()
